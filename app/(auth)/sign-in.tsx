@@ -1,3 +1,4 @@
+import { posthog } from "@/lib/posthog";
 import { useSignIn } from "@clerk/expo";
 import { Link, useRouter, type Href } from "expo-router";
 import { styled } from "nativewind";
@@ -49,6 +50,8 @@ const SignIn = () => {
     }
 
     if (signIn.status === "complete") {
+      posthog.identify(emailAddress, { $set: { email: emailAddress } });
+      posthog.capture("user_signed_in", { method: "password" });
       await signIn.finalize({
         navigate: ({ session, decorateUrl }) => {
           if (session?.currentTask) {
@@ -91,6 +94,8 @@ const SignIn = () => {
     await signIn.mfa.verifyEmailCode({ code });
 
     if (signIn.status === "complete") {
+      posthog.identify(emailAddress, { $set: { email: emailAddress } });
+      posthog.capture("user_signed_in", { method: "password_mfa" });
       await signIn.finalize({
         navigate: ({ session, decorateUrl }) => {
           if (session?.currentTask) {

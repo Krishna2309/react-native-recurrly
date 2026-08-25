@@ -1,3 +1,4 @@
+import { posthog } from "@/lib/posthog";
 import { useAuth, useSignUp } from "@clerk/expo";
 import { Link, useRouter, type Href } from "expo-router";
 import { styled } from "nativewind";
@@ -59,6 +60,11 @@ const SignUp = () => {
     });
 
     if (signUp.status === "complete") {
+      posthog.identify(emailAddress, {
+        $set: { email: emailAddress },
+        $set_once: { signup_date: new Date().toISOString() },
+      });
+      posthog.capture("user_signed_up", { method: "password" });
       await signUp.finalize({
         navigate: ({ session, decorateUrl }) => {
           if (session?.currentTask) {
