@@ -65,7 +65,7 @@ const Settings = () => {
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {user?.id?.substring(0, 20)}...
+              {user?.id ?? "N/A"}
             </Text>
           </View>
           <View className="flex-row justify-between items-center py-2">

@@ -30,8 +30,6 @@ export default function App() {
     user?.emailAddresses[0]?.emailAddress ||
     "User";
 
-  console.log("user", JSON.stringify(user));
-
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
       <FlatList
