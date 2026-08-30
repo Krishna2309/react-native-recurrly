@@ -1,4 +1,5 @@
 import images from "@/constants/images";
+import { posthog } from "@/lib/posthog";
 import { useClerk, useUser } from "@clerk/expo";
 import { styled } from "nativewind";
 import { Image, Pressable, Text, View } from "react-native";
@@ -11,6 +12,8 @@ const Settings = () => {
 
   const handleSignOut = async () => {
     try {
+      posthog.capture("user_signed_out");
+      posthog.reset();
       await signOut();
     } catch (error) {
       console.error("Sign-out failed:", error);
